@@ -46,7 +46,8 @@ def setup_ships() -> list:
             player_setup(player_1_ships)
         players_done_setup += 1
         print("Player 2 turn")
-        player_setup(player_2_ships)
+        for i in range(ships):
+            player_setup(player_2_ships)
         players_done_setup += 1
         if players_done_setup == 2:
             setup_complete = True
@@ -54,10 +55,21 @@ def setup_ships() -> list:
 
 
 def player_setup(ships: list):
-    inputs = list()
+    while True:
+        inputs = list()
+        row, col = get_input()
+        inputs.append(row)
+        inputs.append(col)
+        if inputs not in ships:
+            ships.append(inputs)
+            break
+        else:
+            print("You've already placed ship on that field!")
+            continue
+
+
+def get_input():
     user_input = input("Select field (ex. B2)").upper()
     row = int(ord(user_input[:1])) - 65
     col = int(user_input[1:]) - 1
-    inputs.append(row)
-    inputs.append(col)
-    ships.append(inputs)
+    return row, col
