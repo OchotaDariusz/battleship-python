@@ -65,12 +65,14 @@ def main():
 def get_size_from_input() -> int:
     """Returns value for height and width based on user input"""
     while True:
-        value = int(input("Choose board size (5-10): "))
-        if 5 <= value <= 10:
+        value = input("Choose board size (5-10): ")
+        if not(value.isdigit()):
+            continue
+        if 5 <= int(value) <= 10:
             break
         else:
             print("Invalid input! (must be between 5-10)\n")
-    return value, value
+    return int(value), int(value)
 
 
 if __name__ == "__main__":
