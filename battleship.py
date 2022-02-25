@@ -57,27 +57,21 @@ def print_board(player_1_board: list, player_2_board: list):
 
 
 def main():
-    height, width = choose_size()
+    height, width = get_size_from_input()
     player_1_board, player_2_board = generate_boards(height, width)
+    console_clear()
     print_board(player_1_board, player_2_board)
 
 
-def choose_size() -> int:
-    """Allows user to choose height and width to generate custom board size"""
-    height = get_size_from_input("height")
-    width = get_size_from_input("width")
-    return height, width
-
-
-def get_size_from_input(name: str) -> int:
-    """Returns value for (name) based on user input"""
+def get_size_from_input() -> int:
+    """Returns value for height and width based on user input"""
     while True:
-        value = int(input(f"Choose board {name} (5-10): "))
+        value = int(input("Choose board size (5-10): "))
         if 5 <= value <= 10:
             break
         else:
             print("Invalid input! (must be between 5-10)\n")
-    return value
+    return value, value
 
 
 if __name__ == "__main__":
