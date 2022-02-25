@@ -1,3 +1,10 @@
+import os
+
+
+def console_clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 def get_size_from_input() -> int:
     """Returns value for height and width based on user input"""
     while True:
@@ -41,11 +48,11 @@ def setup_ships() -> list:
     setup_complete = False
     players_done_setup = 0
     while setup_complete is not True:
-        print("Player 1 turn")
+        print("\nPlayer 1 turn")
         for i in range(ships):
             player_setup(player_1_ships)
         players_done_setup += 1
-        print("Player 2 turn")
+        print("\nPlayer 2 turn")
         for i in range(ships):
             player_setup(player_2_ships)
         players_done_setup += 1
