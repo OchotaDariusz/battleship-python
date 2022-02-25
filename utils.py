@@ -36,7 +36,7 @@ def build_board(height: int, width: int, board: list) -> list:
     return board
 
 
-def setup_game():
+def setup_game() -> list:
     height, width = get_size_from_input()
     player_1_board, player_2_board = generate_boards(height, width)
     return player_1_board, player_2_board
@@ -45,34 +45,52 @@ def setup_game():
 def setup_ships() -> list:
     ships = 3
     player_1_ships, player_2_ships = list(), list()
+    p1_disallowed_fields, p2_disallowed_fields = list(), list()
     setup_complete = False
     players_done_setup = 0
     while setup_complete is not True:
+        # console_clear()
         print("\nPlayer 1 turn")
         for i in range(ships):
-            player_setup(player_1_ships)
+            player_setup(player_1_ships, p1_disallowed_fields)
         players_done_setup += 1
+        # console_clear()
         print("\nPlayer 2 turn")
         for i in range(ships):
-            player_setup(player_2_ships)
+            player_setup(player_2_ships, p2_disallowed_fields)
         players_done_setup += 1
         if players_done_setup == 2:
             setup_complete = True
-    return player_1_ships, player_2_ships
+    return player_1_ships, player_2_ships, p1_disallowed_fields, p2_disallowed_fields
 
 
-def player_setup(ships: list):
+def player_setup(ships: list, disallowed_fields: list):
     while True:
         inputs = list()
         row, col = get_input()
         inputs.append(row)
         inputs.append(col)
-        if inputs not in ships:
-            ships.append(inputs)
-            break
-        else:
+        if inputs in disallowed_fields:
+            print("Ships are too close!")
+            continue
+        if inputs in ships:
             print("You've already placed ship on that field!")
             continue
+        else:
+            update_fields(ships, disallowed_fields, inputs, row, col)
+            break
+
+
+def update_fields(ships, disallowed_fields, inputs, row, col):
+    ships.append(inputs)
+    disallowed_ = [row + 1, col]
+    disallowed_fields.append(disallowed_)
+    disallowed_ = [row - 1, col]
+    disallowed_fields.append(disallowed_)
+    disallowed_ = [row, col + 1]
+    disallowed_fields.append(disallowed_)
+    disallowed_ = [row, col - 1]
+    disallowed_fields.append(disallowed_)
 
 
 def get_input():
