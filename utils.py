@@ -28,11 +28,13 @@ def generate_boards(height: int, width: int) -> list:
 
 def build_board(height: int, width: int, board: list) -> list:
     """Builds board based on height, width and empty list"""
+    # for i in range(height):
+    #     board.append(['0'])
+    # for row in board:
+    #     for i in range(width):
+    #         row.append(['0'])
     for i in range(height):
-        board.append(['0'])
-    for row in board:
-        for i in range(width):
-            row.append(['0'])
+        board.append(['0'] * width)
     return board
 
 
