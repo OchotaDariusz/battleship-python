@@ -46,8 +46,8 @@ def setup_game() -> list:
 
 def setup_ships() -> list:
     ships = {"Big Boat": 3,
-         "Medium boat": 2,
-         "Small boat": 1}
+             "Medium boat": 2,
+             "Small boat": 1}
     # ships = 3
     player_1_ships, player_2_ships = list(), list()
     p1_disallowed_fields, p2_disallowed_fields = list(), list()
@@ -78,70 +78,88 @@ def player_setup(placed_ships: list, disallowed_fields: list, ships: dict, ship:
             row, col = get_input()
             inputs.append(row)
             inputs.append(col)
-            for field in range(len(disallowed_fields)):  # TODO: fix that
-                if inputs in disallowed_fields[field]:
-                    print("Ships are too close!")
-                    correct_pos = False
-                    continue
-            for place in range(len(placed_ships)):
-                if inputs in placed_ships[place]:
-                    print("You've already placed ship on that field!")
-                    correct_pos = False
-                    continue
+            if inputs in placed_ships or inputs in disallowed_fields:
+                print("Ships are too close!")
+                correct_pos = False
+                continue
             if correct_pos is True:
-                update_fields(placed_ships, disallowed_fields, inputs, row, col)
+                update_fields(placed_ships, disallowed_fields, inputs)
                 break
-    else:  # TODO: place ships bigger than Small Boat
+    else:
         print("Place:", ship)
         while True:
-            all_inputs, inputs = list(), list()
+            correct_pos = True
+            all_inputs = list()
             row, col = get_input()
-            inputs.append(row)
-            inputs.append(col)
             user_input = input("Horizontal(H) or Vertical(V)?: ").upper()
             if user_input.startswith("H"):
                 for i in range(ships[ship]):
-                    all_inputs.append(inputs)
                     inputs = list()
                     inputs.append(row)
-                    inputs.append(col + (i + 1))
+                    inputs.append(col + i)
+                    all_inputs.append(inputs)
             if user_input.startswith("V"):
                 for i in range(ships[ship]):
-                    all_inputs.append(inputs)
                     inputs = list()
-                    inputs.append(row + (i + 1))
+                    inputs.append(row + i)
                     inputs.append(col)
-            # for boat in range(len(all_inputs)):
-            #     for field in range(len(all_inputs[boat])):
-            #         if all_inputs[boat][field] in placed_ships or all_inputs[boat][field] in disallowed_fields:
-            #             print("Ships are too close!")
-            #             continue
+                    all_inputs.append(inputs)
             for boat in range(len(all_inputs)):
                 if all_inputs[boat] in placed_ships or all_inputs[boat] in disallowed_fields:
                     print("Ships are too close!")
+                    correct_pos = False
                     continue
-            # if inputs in disallowed_fields:
-            #     print("Ships are too close!")
-            #     continue
-            # if inputs in placed_ships:
-            #     print("You've already placed ship on that field!")
-            #     continue
-                else:
-                    update_fields(placed_ships, disallowed_fields, all_inputs, row, col)
-                    break
-            break
+            if correct_pos is True:
+                update_fields(placed_ships, disallowed_fields, all_inputs)
+                break
 
 
-def update_fields(placed_ships, disallowed_fields, inputs, row, col):
+def update_fields(placed_ships, disallowed_fields, inputs):
     placed_ships.append(inputs)
-    disallowed_ = [row + 1, col]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row - 1, col]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row, col + 1]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row, col - 1]
-    disallowed_fields.append(disallowed_)
+    for index in range(len(placed_ships)):
+        if len(placed_ships) == 3:
+            disallowed_ = list()
+            disallowed_.append(placed_ships[2][0])
+            disallowed_.append(placed_ships[2][1] + 1)
+            if disallowed_ not in disallowed_fields:
+                disallowed_fields.append(disallowed_)
+            disallowed_ = list()
+            disallowed_.append(placed_ships[2][0] + 1)
+            disallowed_.append(placed_ships[2][1])
+            if disallowed_ not in disallowed_fields:
+                disallowed_fields.append(disallowed_)
+            disallowed_ = list()
+            disallowed_.append(placed_ships[2][0])
+            disallowed_.append(placed_ships[2][1] - 1)
+            if disallowed_ not in disallowed_fields:
+                disallowed_fields.append(disallowed_)
+            disallowed_ = list()
+            disallowed_.append(placed_ships[2][0] - 1)
+            disallowed_.append(placed_ships[2][1])
+            if disallowed_ not in disallowed_fields:
+                disallowed_fields.append(disallowed_)
+        else:
+            for nested_index in range(len(placed_ships[index])):
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0])
+                disallowed_.append(placed_ships[index][nested_index][1] + 1)
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0] + 1)
+                disallowed_.append(placed_ships[index][nested_index][1])
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0])
+                disallowed_.append(placed_ships[index][nested_index][1] - 1)
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0] - 1)
+                disallowed_.append(placed_ships[index][nested_index][1])
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
 
 
 def get_input():
