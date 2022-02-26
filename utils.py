@@ -76,6 +76,18 @@ def setup_ships() -> list:
     return player_1_ships, player_2_ships, p1_disallowed_fields, p2_disallowed_fields
 
 
+def create_hitboard(player_ships: list) -> list:
+    """Creates hitboard for player based on placed ships"""
+    player_hitboard = list()
+    for ship in range(len(player_ships)):
+        if isinstance(player_ships[ship][0], list):
+            for field in range(len(player_ships[ship])):
+                player_hitboard.append(player_ships[ship][field])
+        else:
+            player_hitboard.append(player_ships[ship])
+    return player_hitboard
+
+
 def player_setup(placed_ships: list, disallowed_fields: list, ships: dict, ship: str):
     if ships[ship] == 1:
         print("Place:", ship)
