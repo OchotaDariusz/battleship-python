@@ -118,26 +118,7 @@ def update_fields(placed_ships, disallowed_fields, inputs):
     placed_ships.append(inputs)
     for index in range(len(placed_ships)):
         if len(placed_ships) == 3:
-            disallowed_ = list()
-            disallowed_.append(placed_ships[2][0])
-            disallowed_.append(placed_ships[2][1] + 1)
-            if disallowed_ not in disallowed_fields:
-                disallowed_fields.append(disallowed_)
-            disallowed_ = list()
-            disallowed_.append(placed_ships[2][0] + 1)
-            disallowed_.append(placed_ships[2][1])
-            if disallowed_ not in disallowed_fields:
-                disallowed_fields.append(disallowed_)
-            disallowed_ = list()
-            disallowed_.append(placed_ships[2][0])
-            disallowed_.append(placed_ships[2][1] - 1)
-            if disallowed_ not in disallowed_fields:
-                disallowed_fields.append(disallowed_)
-            disallowed_ = list()
-            disallowed_.append(placed_ships[2][0] - 1)
-            disallowed_.append(placed_ships[2][1])
-            if disallowed_ not in disallowed_fields:
-                disallowed_fields.append(disallowed_)
+            break
         else:
             for nested_index in range(len(placed_ships[index])):
                 disallowed_ = list()
