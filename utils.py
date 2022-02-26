@@ -45,7 +45,10 @@ def setup_game() -> list:
 
 
 def setup_ships() -> list:
-    ships = 3
+    ships = {"Big Boat": 3,
+         "Medium boat": 2,
+         "Small boat": 1}
+    # ships = 3
     player_1_ships, player_2_ships = list(), list()
     p1_disallowed_fields, p2_disallowed_fields = list(), list()
     setup_complete = False
@@ -53,38 +56,42 @@ def setup_ships() -> list:
     while setup_complete is not True:
         # console_clear()
         print("\nPlayer 1 turn")
-        for i in range(ships):
-            player_setup(player_1_ships, p1_disallowed_fields)
+        for ship in ships:
+            player_setup(player_1_ships, p1_disallowed_fields, ships, ship)
         players_done_setup += 1
         # console_clear()
         print("\nPlayer 2 turn")
-        for i in range(ships):
-            player_setup(player_2_ships, p2_disallowed_fields)
+        # for i in range(ships):
+            # player_setup(player_2_ships, p2_disallowed_fields)
         players_done_setup += 1
         if players_done_setup == 2:
             setup_complete = True
     return player_1_ships, player_2_ships, p1_disallowed_fields, p2_disallowed_fields
 
 
-def player_setup(ships: list, disallowed_fields: list):
-    while True:
-        inputs = list()
-        row, col = get_input()
-        inputs.append(row)
-        inputs.append(col)
-        if inputs in disallowed_fields:
-            print("Ships are too close!")
-            continue
-        if inputs in ships:
-            print("You've already placed ship on that field!")
-            continue
-        else:
-            update_fields(ships, disallowed_fields, inputs, row, col)
-            break
+def player_setup(placed_ships: list, disallowed_fields: list, ships: dict, ship: str):
+    if ships[ship] == 1:
+        print("Place:", ship)
+        while True:
+            inputs = list()
+            row, col = get_input()
+            inputs.append(row)
+            inputs.append(col)
+            if inputs in disallowed_fields:
+                print("Ships are too close!")
+                continue
+            if inputs in placed_ships:
+                print("You've already placed ship on that field!")
+                continue
+            else:
+                update_fields(placed_ships, disallowed_fields, inputs, row, col)
+                break
+    else:  # TODO: place ships bigger than Small Boat
+        print("Place:", ship)
 
 
-def update_fields(ships, disallowed_fields, inputs, row, col):
-    ships.append(inputs)
+def update_fields(placed_ships, disallowed_fields, inputs, row, col):
+    placed_ships.append(inputs)
     disallowed_ = [row + 1, col]
     disallowed_fields.append(disallowed_)
     disallowed_ = [row - 1, col]
