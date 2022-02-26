@@ -20,11 +20,13 @@ def print_board(player_1_board: list, player_2_board: list):
     print()
     print_header(player_1_board)
     for row in range(len(player_1_board)):
-        print(chr(row+65), end=" ")
-        for column in range(len(player_1_board[row])):
-            print(player_1_board[row][column][0], end=" ")
+        draw_board(player_1_board, row)
         print(" ", end=" ")
-        print(chr(row+65), end=" ")
-        for column in range(len(player_1_board[row])):
-            print(player_2_board[row][column][0], end=" ")
+        draw_board(player_2_board, row)
         print()
+
+
+def draw_board(player_board, row):
+    print(chr(row+65), end=" ")
+    for column in range(len(player_board[row])):
+        print(player_board[row][column][0], end=" ")
