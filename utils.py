@@ -5,6 +5,11 @@ def console_clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def pause():
+    input("Press any key to continue...")
+    # console_clear()
+
+
 def get_size_from_input() -> int:
     """Returns value for height and width based on user input"""
     while True:
@@ -45,7 +50,10 @@ def setup_game() -> list:
 
 
 def setup_ships() -> list:
-    ships = 3
+    ships = {"Big Boat": 3,
+             "Medium boat": 2,
+             "Small boat": 1}
+    # ships = 3
     player_1_ships, player_2_ships = list(), list()
     p1_disallowed_fields, p2_disallowed_fields = list(), list()
     setup_complete = False
@@ -53,46 +61,105 @@ def setup_ships() -> list:
     while setup_complete is not True:
         # console_clear()
         print("\nPlayer 1 turn")
-        for i in range(ships):
-            player_setup(player_1_ships, p1_disallowed_fields)
+        for ship in ships:
+            player_setup(player_1_ships, p1_disallowed_fields, ships, ship)
         players_done_setup += 1
+        pause()
         # console_clear()
         print("\nPlayer 2 turn")
-        for i in range(ships):
-            player_setup(player_2_ships, p2_disallowed_fields)
+        for ship in ships:
+            player_setup(player_2_ships, p2_disallowed_fields, ships, ship)
         players_done_setup += 1
+        pause()
         if players_done_setup == 2:
             setup_complete = True
     return player_1_ships, player_2_ships, p1_disallowed_fields, p2_disallowed_fields
 
 
-def player_setup(ships: list, disallowed_fields: list):
-    while True:
-        inputs = list()
-        row, col = get_input()
-        inputs.append(row)
-        inputs.append(col)
-        if inputs in disallowed_fields:
-            print("Ships are too close!")
-            continue
-        if inputs in ships:
-            print("You've already placed ship on that field!")
-            continue
+def create_hitboard(player_ships: list) -> list:
+    """Creates hitboard for player based on placed ships"""
+    player_hitboard = list()
+    for ship in range(len(player_ships)):
+        if isinstance(player_ships[ship][0], list):
+            for field in range(len(player_ships[ship])):
+                player_hitboard.append(player_ships[ship][field])
         else:
-            update_fields(ships, disallowed_fields, inputs, row, col)
+            player_hitboard.append(player_ships[ship])
+    return player_hitboard
+
+
+def player_setup(placed_ships: list, disallowed_fields: list, ships: dict, ship: str):
+    if ships[ship] == 1:
+        print("Place:", ship)
+        while True:
+            correct_pos = True
+            inputs = list()
+            row, col = get_input()
+            inputs.append(row)
+            inputs.append(col)
+            if inputs in placed_ships or inputs in disallowed_fields:
+                print("Ships are too close!")
+                correct_pos = False
+                continue
+            if correct_pos is True:
+                update_fields(placed_ships, disallowed_fields, inputs)
+                break
+    else:
+        print("Place:", ship)
+        while True:
+            correct_pos = True
+            all_inputs = list()
+            row, col = get_input()
+            user_input = input("Horizontal(H) or Vertical(V)?: ").upper()
+            if user_input.startswith("H"):
+                for i in range(ships[ship]):
+                    inputs = list()
+                    inputs.append(row)
+                    inputs.append(col + i)
+                    all_inputs.append(inputs)
+            if user_input.startswith("V"):
+                for i in range(ships[ship]):
+                    inputs = list()
+                    inputs.append(row + i)
+                    inputs.append(col)
+                    all_inputs.append(inputs)
+            for boat in range(len(all_inputs)):
+                if all_inputs[boat] in placed_ships or all_inputs[boat] in disallowed_fields:
+                    print("Ships are too close!")
+                    correct_pos = False
+                    continue
+            if correct_pos is True:
+                update_fields(placed_ships, disallowed_fields, all_inputs)
+                break
+
+
+def update_fields(placed_ships, disallowed_fields, inputs):
+    placed_ships.append(inputs)
+    for index in range(len(placed_ships)):
+        if len(placed_ships) == 3:
             break
-
-
-def update_fields(ships, disallowed_fields, inputs, row, col):
-    ships.append(inputs)
-    disallowed_ = [row + 1, col]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row - 1, col]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row, col + 1]
-    disallowed_fields.append(disallowed_)
-    disallowed_ = [row, col - 1]
-    disallowed_fields.append(disallowed_)
+        else:
+            for nested_index in range(len(placed_ships[index])):
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0])
+                disallowed_.append(placed_ships[index][nested_index][1] + 1)
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0] + 1)
+                disallowed_.append(placed_ships[index][nested_index][1])
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0])
+                disallowed_.append(placed_ships[index][nested_index][1] - 1)
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
+                disallowed_ = list()
+                disallowed_.append(placed_ships[index][nested_index][0] - 1)
+                disallowed_.append(placed_ships[index][nested_index][1])
+                if disallowed_ not in disallowed_fields:
+                    disallowed_fields.append(disallowed_)
 
 
 def get_input():
