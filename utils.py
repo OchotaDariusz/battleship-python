@@ -5,6 +5,11 @@ def console_clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def pause():
+    input("Press any key to continue...")
+    # console_clear()
+
+
 def get_size_from_input() -> int:
     """Returns value for height and width based on user input"""
     while True:
@@ -59,11 +64,13 @@ def setup_ships() -> list:
         for ship in ships:
             player_setup(player_1_ships, p1_disallowed_fields, ships, ship)
         players_done_setup += 1
+        pause()
         # console_clear()
         print("\nPlayer 2 turn")
-        # for i in range(ships):
-            # player_setup(player_2_ships, p2_disallowed_fields)
+        for ship in ships:
+            player_setup(player_2_ships, p2_disallowed_fields, ships, ship)
         players_done_setup += 1
+        pause()
         if players_done_setup == 2:
             setup_complete = True
     return player_1_ships, player_2_ships, p1_disallowed_fields, p2_disallowed_fields
