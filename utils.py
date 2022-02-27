@@ -69,8 +69,6 @@ def update_board(board: list, player_ships: list, phase: str, hit_miss: str, inp
             board[inputs[0]][inputs[1]] = ["H"]
 
 
-
-
 def setup_ships(player_1_board, display_p1_board, display_p2_board) -> list:
     ships = {"Big Boat": 3,
              "Medium boat": 2,
@@ -93,7 +91,7 @@ def setup_ships(player_1_board, display_p1_board, display_p2_board) -> list:
         pause()
         for ship in ships:
             console_clear()
-            display.print_board(player_1_board, display_p2_board)  # TODO
+            display.print_board(player_1_board, display_p2_board)
             print("\nPlayer 2 turn")
             player_setup(player_2_ships, p2_disallowed_fields, ships, ship)
             update_board(display_p2_board, player_2_ships, "placing", None, None)  # TODO
@@ -116,6 +114,39 @@ def create_hitboard(player_ships: list) -> list:
         else:
             player_hitboard.append(player_ships[ship])
     return player_hitboard
+
+
+def check_sunken_ships(board: list, player_ships: list, sunken_ships: list, player_hits: list) -> list:
+    """Creates hitboard for player based on placed ships"""
+    for ship in range(len(player_ships)):
+        if isinstance(player_ships[ship][0], list):
+            if len(player_ships[ship]) == 2:
+                counter = 0
+                for field in range(len(player_ships[ship])):
+                    if player_ships[ship][field] in player_hits:
+                        counter += 1
+                if counter == 2 and "2" not in sunken_ships:
+                    print("You've sunken a Medium boat!")
+                    for field in range(len(player_ships[ship])):
+                        if player_ships[ship][field] in player_hits:
+                            board[player_ships[ship][field][0]][player_ships[ship][field][1]] = ["S"]
+                    sunken_ships.append("2")
+            else:
+                counter = 0
+                for field in range(len(player_ships[ship])):
+                    if player_ships[ship][field] in player_hits:
+                        counter += 1
+                if counter == 3 and "3" not in sunken_ships:
+                    print("You've sunken a Big boat!")
+                    for field in range(len(player_ships[ship])):
+                        if player_ships[ship][field] in player_hits:
+                            board[player_ships[ship][field][0]][player_ships[ship][field][1]] = ["S"]
+                    sunken_ships.append("3")
+        else:
+            if player_ships[ship] in player_hits and "1" not in sunken_ships:
+                print("You've sunken a Small boat!")
+                board[player_ships[ship][0]][player_ships[ship][1]] = ["S"]
+                sunken_ships.append("1")
 
 
 def player_setup(placed_ships: list, disallowed_fields: list, ships: dict, ship: str):
