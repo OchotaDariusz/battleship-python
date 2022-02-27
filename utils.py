@@ -1,3 +1,5 @@
+from copy import deepcopy
+import display
 import os
 
 
@@ -46,10 +48,23 @@ def build_board(height: int, width: int, board: list) -> list:
 def setup_game() -> list:
     height, width = get_size_from_input()
     player_1_board, player_2_board = generate_boards(height, width)
-    return player_1_board, player_2_board
+    display_p1_board = deepcopy(player_1_board)
+    display_p2_board = deepcopy(player_2_board)
+    return player_1_board, player_2_board, display_p1_board, display_p2_board
 
 
-def setup_ships() -> list:
+def update_board(board: list, player_ships: list, phase: str):  # TODO
+    if phase == "placing":
+        if len(player_ships) != 0:
+            for ship in range(len(player_ships)):
+                if isinstance(player_ships[ship][0], list):
+                    for field in range(len(player_ships[ship])):
+                        board[player_ships[ship][field][0]][player_ships[ship][field][1]] = ["X"]
+                else:
+                    board[player_ships[ship][0]][player_ships[ship][1]] = ["X"]
+
+
+def setup_ships(player_1_board, display_p1_board, display_p2_board) -> list:
     ships = {"Big Boat": 3,
              "Medium boat": 2,
              "Small boat": 1}
@@ -59,16 +74,24 @@ def setup_ships() -> list:
     setup_complete = False
     players_done_setup = 0
     while setup_complete is not True:
-        # console_clear()
-        print("\nPlayer 1 turn")
         for ship in ships:
+            console_clear()
+            display.print_board(display_p1_board, display_p2_board)
+            print("\nPlayer 1 turn")
             player_setup(player_1_ships, p1_disallowed_fields, ships, ship)
+            update_board(display_p1_board, player_1_ships, "placing")  # TODO
+        console_clear()
+        display.print_board(display_p1_board, display_p2_board)
         players_done_setup += 1
         pause()
-        # console_clear()
-        print("\nPlayer 2 turn")
         for ship in ships:
+            console_clear()
+            display.print_board(player_1_board, display_p2_board)  # TODO
+            print("\nPlayer 2 turn")
             player_setup(player_2_ships, p2_disallowed_fields, ships, ship)
+            update_board(display_p2_board, player_2_ships, "placing")  # TODO
+        console_clear()
+        display.print_board(player_1_board, display_p2_board)
         players_done_setup += 1
         pause()
         if players_done_setup == 2:
