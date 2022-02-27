@@ -13,19 +13,19 @@ def main():
 
     display.print_board(player_1_board, player_2_board)
 
-    print("Player 1 ships:", player_1_ships)
-    print("Player 1 disallowed fields:", p1_disallowed_fields)
-    print("Player 1 hitboard:", player_1_hitboard)
+    # print("Player 1 ships:", player_1_ships)
+    # print("Player 1 disallowed fields:", p1_disallowed_fields)
+    # print("Player 1 hitboard:", player_1_hitboard)
 
-    print("Player 2 ships:", player_2_ships)
-    print("Player 2 disallowed fields:", p2_disallowed_fields)
-    print("Player 2 hitboard:", player_2_hitboard)
+    # print("Player 2 ships:", player_2_ships)
+    # print("Player 2 disallowed fields:", p2_disallowed_fields)
+    # print("Player 2 hitboard:", player_2_hitboard)
 
     p1_sunken_ships, p2_sunken_ships = list(), list()
     p1_hits, p2_hits = list(), list()
 
     while len(player_1_hitboard) != 0 or len(player_2_hitboard) != 0:  # SHOOTING PHASE
-        print("Player 2 hitboard:", player_2_hitboard)
+        # print("Player 2 hitboard:", player_2_hitboard)
         print("Player 1 shooting phase!")
         shooting_phase(player_2_board,
                        player_1_board,
@@ -39,7 +39,7 @@ def main():
             print("Player 1 wins!")
             break
 
-        print("Player 1 hitboard:", player_1_hitboard)
+        # print("Player 1 hitboard:", player_1_hitboard)
         print("Player 2 shooting phase!")
         shooting_phase(player_1_board,
                        player_1_board,
@@ -77,7 +77,7 @@ def shooting_phase(board: list,
                     player_hitboard.pop(index)
                     break
             utils.update_board(board, player_ships, "shooting", "H", inputs)
-            utils.check_sunken_ships(board, player_ships, sunken_ships, player_hits)  # TODO: it shouldnt count hits but ships
+            utils.check_sunken_ships(board, player_ships, sunken_ships, player_hits)
             display.print_board(player_1_board, player_2_board)
             hit_combo = True
         else:

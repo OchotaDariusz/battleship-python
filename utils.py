@@ -53,7 +53,7 @@ def setup_game() -> list:
     return player_1_board, player_2_board, display_p1_board, display_p2_board
 
 
-def update_board(board: list, player_ships: list, phase: str, hit_miss: str, inputs: list):  # TODO
+def update_board(board: list, player_ships: list, phase: str, hit_miss: str, inputs: list):
     if phase == "placing" and hit_miss is None and inputs is None:
         if len(player_ships) != 0:
             for ship in range(len(player_ships)):
@@ -84,7 +84,7 @@ def setup_ships(player_1_board, display_p1_board, display_p2_board) -> list:
             display.print_board(display_p1_board, display_p2_board)
             print("\nPlayer 1 turn")
             player_setup(player_1_ships, p1_disallowed_fields, ships, ship)
-            update_board(display_p1_board, player_1_ships, "placing", None, None)  # TODO
+            update_board(display_p1_board, player_1_ships, "placing", None, None)
         console_clear()
         display.print_board(display_p1_board, display_p2_board)
         players_done_setup += 1
@@ -94,7 +94,7 @@ def setup_ships(player_1_board, display_p1_board, display_p2_board) -> list:
             display.print_board(player_1_board, display_p2_board)
             print("\nPlayer 2 turn")
             player_setup(player_2_ships, p2_disallowed_fields, ships, ship)
-            update_board(display_p2_board, player_2_ships, "placing", None, None)  # TODO
+            update_board(display_p2_board, player_2_ships, "placing", None, None)
         console_clear()
         display.print_board(player_1_board, display_p2_board)
         players_done_setup += 1
